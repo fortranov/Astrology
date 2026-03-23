@@ -7,8 +7,8 @@ const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? "/proxy-api";
 
 export function LoginForm() {
   const router = useRouter();
-  const [email, setEmail] = useState("abramov.yu.v@gmail.com");
-  const [password, setPassword] = useState("3tuka2puka");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 

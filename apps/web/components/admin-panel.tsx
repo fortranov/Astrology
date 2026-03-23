@@ -57,14 +57,19 @@ export function AdminPanel() {
         const settingsData = (await settingsResponse.json()) as AuthSettings;
         setSettings(settingsData);
       } catch (err) {
-        setError(err instanceof Error ? err.message : "Произошла ошибка");
+        const message = err instanceof Error ? err.message : "Произошла ошибка";
+        setError(message);
+        if (message.includes("войти") || message.includes("администратора")) {
+          router.push("/login");
+          return;
+        }
       } finally {
         setLoading(false);
       }
     }
 
     void load();
-  }, []);
+  }, [router]);
 
   async function saveGoogleAuth(enabled: boolean) {
     setSaving(true);
