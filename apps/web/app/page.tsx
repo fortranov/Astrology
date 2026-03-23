@@ -28,6 +28,8 @@ export default function HomePage() {
             <div className="actions">
               <a className="button button-primary" href="/natal-chart">Натальная карта</a>
               <a className="button button-secondary" href="/tarot">Таро</a>
+              <a className="button button-secondary" href="/login">Вход</a>
+              <a className="button button-secondary" href="/admin">Админка</a>
             </div>
           </div>
           <div className="card">

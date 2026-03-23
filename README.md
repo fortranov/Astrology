@@ -45,6 +45,8 @@ Astrology/
 - same-origin proxy для frontend → API в проде, чтобы браузер не упирался в mixed content
 - детальный natal chart breakdown: Луна, асцендент, стихия, отношения, карьера, предназначение
 - управление историей: удаление профилей и натальных карт
+- email/password авторизация с дефолтным администратором
+- admin page с toggle для Google auth
 - конфиг `DATABASE_URL` с готовностью к persistent storage
 
 ## Локальный запуск
