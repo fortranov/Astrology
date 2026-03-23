@@ -167,6 +167,12 @@ a {
   border: 1px solid rgba(255,255,255,0.08);
 }
 
+.inline-button {
+  margin-top: 10px;
+  width: fit-content;
+  background: transparent;
+}
+
 .error-text {
   color: #ff9ea8;
 }

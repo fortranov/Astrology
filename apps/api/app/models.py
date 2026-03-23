@@ -1,4 +1,4 @@
-from sqlalchemy import Integer, String
+from sqlalchemy import ForeignKey, Integer, String, Text
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.database import Base
@@ -12,3 +12,13 @@ class BirthProfileModel(Base):
     birth_date: Mapped[str] = mapped_column(String(10), nullable=False)
     birth_time: Mapped[str | None] = mapped_column(String(5), nullable=True)
     birth_place: Mapped[str] = mapped_column(String(255), nullable=False)
+
+
+class NatalChartModel(Base):
+    __tablename__ = "natal_charts"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
+    birth_profile_id: Mapped[int] = mapped_column(ForeignKey("birth_profiles.id"), nullable=False, index=True)
+    summary: Mapped[str] = mapped_column(String(255), nullable=False)
+    sun_sign: Mapped[str] = mapped_column(String(40), nullable=False)
+    interpretation: Mapped[str] = mapped_column(Text, nullable=False)

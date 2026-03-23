@@ -10,6 +10,14 @@ type BirthProfile = {
   birth_place: string;
 };
 
+type NatalChartResult = {
+  id: number;
+  birth_profile_id: number;
+  summary: string;
+  sun_sign: string;
+  interpretation: string;
+};
+
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://127.0.0.1:8000/api";
 
 export function BirthProfileForm() {
@@ -18,7 +26,9 @@ export function BirthProfileForm() {
   const [birthTime, setBirthTime] = useState("");
   const [birthPlace, setBirthPlace] = useState("");
   const [profiles, setProfiles] = useState<BirthProfile[]>([]);
+  const [charts, setCharts] = useState<NatalChartResult[]>([]);
   const [loading, setLoading] = useState(false);
+  const [calculatingId, setCalculatingId] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
 
@@ -37,6 +47,23 @@ export function BirthProfileForm() {
 
     const data = (await response.json()) as BirthProfile[];
     setProfiles(data);
+  }
+
+  async function loadCharts() {
+    const response = await fetch(`${API_BASE}/natal-chart`, {
+      cache: "no-store",
+    });
+
+    if (!response.ok) {
+      throw new Error("Не удалось загрузить результаты натальной карты");
+    }
+
+    const data = (await response.json()) as NatalChartResult[];
+    setCharts(data);
+  }
+
+  async function refreshAll() {
+    await Promise.all([loadProfiles(), loadCharts()]);
   }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -68,11 +95,38 @@ export function BirthProfileForm() {
       setBirthDate("");
       setBirthTime("");
       setBirthPlace("");
-      await loadProfiles();
+      await refreshAll();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Произошла ошибка");
     } finally {
       setLoading(false);
+    }
+  }
+
+  async function calculateNatalChart(profileId: number) {
+    setCalculatingId(profileId);
+    setError(null);
+    setSuccess(null);
+
+    try {
+      const response = await fetch(`${API_BASE}/natal-chart/calculate`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ birth_profile_id: profileId }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Не удалось рассчитать натальную карту");
+      }
+
+      setSuccess("Натальная карта рассчитана");
+      await refreshAll();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Произошла ошибка");
+    } finally {
+      setCalculatingId(null);
     }
   }
 
@@ -110,7 +164,7 @@ export function BirthProfileForm() {
             <button className="button button-primary" disabled={!canSubmit || loading} type="submit">
               {loading ? "Сохраняю..." : "Сохранить профиль"}
             </button>
-            <button className="button button-secondary" onClick={() => void loadProfiles()} type="button">
+            <button className="button button-secondary" onClick={() => void refreshAll()} type="button">
               Обновить список
             </button>
           </div>
@@ -137,10 +191,35 @@ export function BirthProfileForm() {
                 <span>{profile.birth_date}</span>
                 <span>{profile.birth_time || "Время не указано"}</span>
                 <span>{profile.birth_place}</span>
+                <button
+                  className="button button-secondary inline-button"
+                  disabled={calculatingId === profile.id}
+                  onClick={() => void calculateNatalChart(profile.id)}
+                  type="button"
+                >
+                  {calculatingId === profile.id ? "Считаю..." : "Рассчитать натальную карту"}
+                </button>
               </article>
             ))}
           </div>
         )}
+
+        <div style={{ marginTop: 24 }}>
+          <div className="kicker">Результаты MVP</div>
+          {charts.length === 0 ? (
+            <p className="muted">Пока расчётов нет.</p>
+          ) : (
+            <div className="profile-list">
+              {charts.map((chart) => (
+                <article className="profile-item" key={chart.id}>
+                  <strong>{chart.summary}</strong>
+                  <span>Солнце: {chart.sun_sign}</span>
+                  <span className="muted">{chart.interpretation}</span>
+                </article>
+              ))}
+            </div>
+          )}
+        </div>
       </section>
     </div>
   );
