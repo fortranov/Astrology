@@ -4,10 +4,28 @@ from sqlalchemy.orm import Session
 from app.database import get_db
 from app.dependencies import get_current_user
 from app.models import UserModel
-from app.schemas.auth import LoginRequest, LoginResponse, UserResponse
-from app.security import create_access_token, verify_password
+from app.schemas.auth import LoginRequest, LoginResponse, RegisterRequest, UserResponse
+from app.security import create_access_token, hash_password, verify_password
 
 router = APIRouter(prefix="/auth", tags=["auth"])
+
+
+@router.post("/register", response_model=UserResponse)
+def register(payload: RegisterRequest, db: Session = Depends(get_db)) -> UserResponse:
+    existing_user = db.query(UserModel).filter(UserModel.email == payload.email).first()
+    if existing_user:
+        raise HTTPException(status_code=409, detail="Email already registered")
+
+    user = UserModel(
+        email=payload.email,
+        password_hash=hash_password(payload.password),
+        is_admin=False,
+        is_active=True,
+    )
+    db.add(user)
+    db.commit()
+    db.refresh(user)
+    return user
 
 
 @router.post("/login", response_model=LoginResponse)

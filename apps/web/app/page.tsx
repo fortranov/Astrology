@@ -29,6 +29,7 @@ export default function HomePage() {
               <a className="button button-primary" href="/natal-chart">Натальная карта</a>
               <a className="button button-secondary" href="/tarot">Таро</a>
               <a className="button button-secondary" href="/login">Войти</a>
+              <a className="button button-secondary" href="/register">Регистрация</a>
             </div>
           </div>
           <div className="card">
