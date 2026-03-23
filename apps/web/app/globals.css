@@ -173,6 +173,29 @@ a {
   background: transparent;
 }
 
+.detail-card-wrap {
+  display: grid;
+  gap: 12px;
+}
+
+.detail-card {
+  display: grid;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.detail-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.detail-list {
+  margin: 0;
+  padding-left: 18px;
+  color: var(--muted);
+}
+
 .error-text {
   color: #ff9ea8;
 }
@@ -184,7 +207,8 @@ a {
 @media (max-width: 900px) {
   .hero-grid,
   .grid-3,
-  .birth-layout {
+  .birth-layout,
+  .detail-grid {
     grid-template-columns: 1fr;
   }
 

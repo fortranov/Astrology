@@ -2,6 +2,8 @@
 
 import { FormEvent, useMemo, useState } from "react";
 
+import { NatalChartDetailCard } from "@/components/natal-chart-detail";
+
 type BirthProfile = {
   id: number;
   name: string;
@@ -215,6 +217,7 @@ export function BirthProfileForm() {
                   <strong>{chart.summary}</strong>
                   <span>Солнце: {chart.sun_sign}</span>
                   <span className="muted">{chart.interpretation}</span>
+                  <NatalChartDetailCard chartId={chart.id} />
                 </article>
               ))}
             </div>

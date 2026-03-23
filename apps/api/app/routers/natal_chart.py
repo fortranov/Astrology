@@ -3,8 +3,8 @@ from sqlalchemy.orm import Session
 
 from app.database import get_db
 from app.models import BirthProfileModel, NatalChartModel
-from app.schemas.natal_chart import NatalChartCalculateRequest, NatalChartResult
-from app.services import build_natal_summary
+from app.schemas.natal_chart import NatalChartCalculateRequest, NatalChartDetail, NatalChartResult
+from app.services import build_natal_details, build_natal_summary
 
 router = APIRouter(prefix="/natal-chart", tags=["natal-chart"])
 
@@ -37,3 +37,30 @@ def calculate_natal_chart(payload: NatalChartCalculateRequest, db: Session = Dep
 @router.get("", response_model=list[NatalChartResult])
 def list_natal_charts(db: Session = Depends(get_db)) -> list[NatalChartModel]:
     return db.query(NatalChartModel).order_by(NatalChartModel.id.desc()).all()
+
+
+@router.get("/{chart_id}", response_model=NatalChartDetail)
+def get_natal_chart(chart_id: int, db: Session = Depends(get_db)) -> NatalChartDetail:
+    chart = db.query(NatalChartModel).filter(NatalChartModel.id == chart_id).first()
+    if not chart:
+        raise HTTPException(status_code=404, detail="Natal chart not found")
+
+    profile = db.query(BirthProfileModel).filter(BirthProfileModel.id == chart.birth_profile_id).first()
+    if not profile:
+        raise HTTPException(status_code=404, detail="Birth profile not found")
+
+    details = build_natal_details(
+        name=profile.name,
+        birth_date=profile.birth_date,
+        birth_time=profile.birth_time,
+        birth_place=profile.birth_place,
+    )
+
+    return NatalChartDetail(
+        id=chart.id,
+        birth_profile_id=chart.birth_profile_id,
+        summary=chart.summary,
+        sun_sign=chart.sun_sign,
+        interpretation=chart.interpretation,
+        **details,
+    )
