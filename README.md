@@ -42,6 +42,7 @@ Astrology/
 - API-маршруты `health` и `birth-profiles`
 - первый end-to-end сценарий для создания профиля рождения
 - MVP-расчёт натальной карты с сохранением результата
+- same-origin proxy для frontend → API в проде, чтобы браузер не упирался в mixed content
 ```
 
 ## Локальный запуск
