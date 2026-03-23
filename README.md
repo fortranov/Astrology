@@ -45,6 +45,17 @@ Astrology/
 
 ## Локальный запуск
 
+### Через Docker Compose
+
+```bash
+docker compose up --build
+```
+
+Сервисы:
+- frontend: `http://localhost:3000`
+- backend: `http://localhost:8000`
+- postgres: `localhost:5432`
+
 ### Frontend
 
 ```bash

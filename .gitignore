@@ -2,12 +2,19 @@
 node_modules/
 .next/
 out/
+apps/web/.next/
+apps/web/node_modules/
 
 # Python
 __pycache__/
 *.pyc
 .venv/
 .env
+apps/api/.venv/
+
+# Database / local state
+*.db
+*.sqlite3
 
 # OS / editor
 .DS_Store

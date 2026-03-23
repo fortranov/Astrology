@@ -1,8 +1,11 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from app.database import Base, engine
 from app.routers.health import router as health_router
 from app.routers.birth_profiles import router as birth_profiles_router
+
+Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
     title="Astrology API",
