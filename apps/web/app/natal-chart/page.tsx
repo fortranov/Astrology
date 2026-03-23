@@ -1,4 +1,4 @@
-import { BirthProfileForm } from "@/components/birth-profile-form";
+import { NatalChartGuard } from "@/components/natal-chart-guard";
 
 export default function NatalChartPage() {
   return (
@@ -10,7 +10,7 @@ export default function NatalChartPage() {
           Первый реальный продуктовый flow: создаём профиль рождения, сохраняем его через API и готовим основу для расчёта карты.
         </p>
       </div>
-      <BirthProfileForm />
+      <NatalChartGuard />
     </main>
   );
 }
