@@ -1,0 +1,132 @@
+:root {
+  color-scheme: dark;
+  --bg: #0b1020;
+  --bg-soft: #131a31;
+  --card: rgba(255, 255, 255, 0.06);
+  --text: #f5f7ff;
+  --muted: #b7bdd3;
+  --accent: #b784ff;
+  --accent-2: #6ed8ff;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: radial-gradient(circle at top, #1a2144 0%, var(--bg) 55%);
+  color: var(--text);
+  font-family: Inter, Arial, sans-serif;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.container {
+  width: min(1120px, calc(100% - 32px));
+  margin: 0 auto;
+}
+
+.hero {
+  padding: 88px 0 56px;
+}
+
+.hero-grid {
+  display: grid;
+  gap: 32px;
+  grid-template-columns: 1.2fr 0.8fr;
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 24px;
+  padding: 24px;
+  backdrop-filter: blur(8px);
+}
+
+.badge {
+  display: inline-block;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: rgba(183, 132, 255, 0.18);
+  color: #ecd9ff;
+  font-size: 14px;
+  margin-bottom: 18px;
+}
+
+.title {
+  font-size: clamp(40px, 7vw, 72px);
+  line-height: 0.96;
+  margin: 0 0 18px;
+}
+
+.subtitle {
+  color: var(--muted);
+  font-size: 18px;
+  line-height: 1.7;
+  max-width: 720px;
+}
+
+.actions {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-top: 28px;
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: 0 18px;
+  border-radius: 14px;
+  font-weight: 600;
+}
+
+.button-primary {
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  color: #09101d;
+}
+
+.button-secondary {
+  border: 1px solid rgba(255,255,255,0.18);
+  color: var(--text);
+}
+
+.section {
+  padding: 20px 0 56px;
+}
+
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.kicker {
+  color: #d8b8ff;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 12px;
+}
+
+.muted {
+  color: var(--muted);
+}
+
+@media (max-width: 900px) {
+  .hero-grid,
+  .grid-3 {
+    grid-template-columns: 1fr;
+  }
+
+  .hero {
+    padding-top: 48px;
+  }
+}

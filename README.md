@@ -1,0 +1,57 @@
+# Astrology
+
+Монорепозиторий для онлайн-сервиса астрологии и Таро.
+
+## Стек
+
+- **frontend**: Next.js
+- **backend**: FastAPI
+
+## План первого этапа
+
+На старте закладываем фундамент:
+
+- базовую структуру monorepo
+- frontend-приложение с landing page и страницами-заглушками
+- backend API с healthcheck и базовой модульной структурой
+- документацию по запуску
+
+## Структура
+
+```text
+Astrology/
+  apps/
+    web/        # Next.js frontend
+    api/        # FastAPI backend
+  docs/
+    product/    # продуктовые заметки и ТЗ
+```
+
+## Следующие шаги
+
+1. Сделать полноценный onboarding-landing
+2. Добавить модели пользователя и birth profile
+3. Реализовать первый сценарий натальной карты
+4. Подготовить модуль tarot readings
+5. Добавить БД и миграции
+```
+
+## Локальный запуск
+
+### Frontend
+
+```bash
+cd apps/web
+npm install
+npm run dev
+```
+
+### Backend
+
+```bash
+cd apps/api
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+uvicorn app.main:app --reload
+```
