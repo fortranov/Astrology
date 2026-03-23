@@ -1,24 +1,13 @@
 services:
-  db:
-    image: postgres:16-alpine
-    environment:
-      POSTGRES_DB: astrology
-      POSTGRES_USER: astrology
-      POSTGRES_PASSWORD: astrology
-    ports:
-      - "5432:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-
   api:
     build:
       context: ./apps/api
     environment:
-      DATABASE_URL: postgresql+psycopg://astrology:astrology@db:5432/astrology
+      DATABASE_URL: sqlite:////data/astrology.db
+    volumes:
+      - api_data:/data
     ports:
       - "8000:8000"
-    depends_on:
-      - db
 
   web:
     build:
@@ -31,4 +20,4 @@ services:
       - api
 
 volumes:
-  postgres_data:
+  api_data:

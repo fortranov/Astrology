@@ -60,7 +60,7 @@ docker compose up --build
 Сервисы:
 - frontend: `http://localhost:3000`
 - backend: `http://localhost:8000`
-- postgres: `localhost:5432`
+- SQLite хранится в docker volume `api_data`
 
 ### Frontend
 
@@ -77,21 +77,15 @@ cd apps/api
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
-DATABASE_URL=postgresql+psycopg://astrology:astrology@localhost:5432/astrology uvicorn app.main:app --reload
+DATABASE_URL=sqlite:////data/astrology.db uvicorn app.main:app --reload
 ```
 
-## Постоянная БД: с чего начинаем
+## Текущая стратегия хранения данных
 
-Сейчас проект готов к двум сценариям:
+Сейчас проект возвращён к SQLite:
 
-1. **локально / простой deploy** — SQLite в persistent volume:
-   - путь по умолчанию: `/data/astrology.db`
-2. **нормальный прод** — Postgres через `DATABASE_URL`
+- основной путь: `/data/astrology.db`
+- для Docker Compose используется persistent volume `api_data`
+- для Coolify API нужно держать `DATABASE_URL=sqlite:////data/astrology.db`
 
-Ближайший следующий шаг для Coolify:
-- создать отдельную Postgres database resource
-- выдать API переменную `DATABASE_URL`
-- задеплоить только `astrology-api`
-- проверить `/api/health/db`
-
-Это позволит перестать терять данные после redeploy.
+Это более лёгкий режим для сервера и снижает нагрузку по сравнению с отдельным Postgres-сервисом.
