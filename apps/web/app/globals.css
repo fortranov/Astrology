@@ -79,6 +79,13 @@ a {
   margin-top: 28px;
 }
 
+.inline-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
 .button {
   display: inline-flex;
   align-items: center;
@@ -97,6 +104,12 @@ a {
 .button-secondary {
   border: 1px solid rgba(255,255,255,0.18);
   color: var(--text);
+}
+
+.button-danger {
+  border: 1px solid rgba(255, 126, 145, 0.35);
+  color: #ffb4be;
+  background: rgba(255, 126, 145, 0.08);
 }
 
 .section {

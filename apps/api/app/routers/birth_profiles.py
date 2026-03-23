@@ -1,8 +1,8 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from app.database import get_db
-from app.models import BirthProfileModel
+from app.models import BirthProfileModel, NatalChartModel
 from app.schemas.birth_profile import BirthProfile, BirthProfileCreate
 
 router = APIRouter(prefix="/birth-profiles", tags=["birth-profiles"])
@@ -20,3 +20,15 @@ def create_birth_profile(payload: BirthProfileCreate, db: Session = Depends(get_
     db.commit()
     db.refresh(profile)
     return profile
+
+
+@router.delete("/{profile_id}")
+def delete_birth_profile(profile_id: int, db: Session = Depends(get_db)) -> dict[str, str]:
+    profile = db.query(BirthProfileModel).filter(BirthProfileModel.id == profile_id).first()
+    if not profile:
+        raise HTTPException(status_code=404, detail="Birth profile not found")
+
+    db.query(NatalChartModel).filter(NatalChartModel.birth_profile_id == profile_id).delete()
+    db.delete(profile)
+    db.commit()
+    return {"status": "deleted"}

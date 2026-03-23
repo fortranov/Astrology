@@ -64,3 +64,14 @@ def get_natal_chart(chart_id: int, db: Session = Depends(get_db)) -> NatalChartD
         interpretation=chart.interpretation,
         **details,
     )
+
+
+@router.delete("/{chart_id}")
+def delete_natal_chart(chart_id: int, db: Session = Depends(get_db)) -> dict[str, str]:
+    chart = db.query(NatalChartModel).filter(NatalChartModel.id == chart_id).first()
+    if not chart:
+        raise HTTPException(status_code=404, detail="Natal chart not found")
+
+    db.delete(chart)
+    db.commit()
+    return {"status": "deleted"}

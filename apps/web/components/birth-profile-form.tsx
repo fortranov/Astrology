@@ -31,6 +31,8 @@ export function BirthProfileForm() {
   const [charts, setCharts] = useState<NatalChartResult[]>([]);
   const [loading, setLoading] = useState(false);
   const [calculatingId, setCalculatingId] = useState<number | null>(null);
+  const [deletingProfileId, setDeletingProfileId] = useState<number | null>(null);
+  const [deletingChartId, setDeletingChartId] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
 
@@ -132,6 +134,52 @@ export function BirthProfileForm() {
     }
   }
 
+  async function deleteProfile(profileId: number) {
+    setDeletingProfileId(profileId);
+    setError(null);
+    setSuccess(null);
+
+    try {
+      const response = await fetch(`${API_BASE}/birth-profiles/${profileId}`, {
+        method: "DELETE",
+      });
+
+      if (!response.ok) {
+        throw new Error("Не удалось удалить профиль");
+      }
+
+      setSuccess("Профиль удалён");
+      await refreshAll();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Произошла ошибка");
+    } finally {
+      setDeletingProfileId(null);
+    }
+  }
+
+  async function deleteChart(chartId: number) {
+    setDeletingChartId(chartId);
+    setError(null);
+    setSuccess(null);
+
+    try {
+      const response = await fetch(`${API_BASE}/natal-chart/${chartId}`, {
+        method: "DELETE",
+      });
+
+      if (!response.ok) {
+        throw new Error("Не удалось удалить натальную карту");
+      }
+
+      setSuccess("Натальная карта удалена");
+      await refreshAll();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Произошла ошибка");
+    } finally {
+      setDeletingChartId(null);
+    }
+  }
+
   return (
     <div className="birth-layout">
       <section className="card">
@@ -193,14 +241,24 @@ export function BirthProfileForm() {
                 <span>{profile.birth_date}</span>
                 <span>{profile.birth_time || "Время не указано"}</span>
                 <span>{profile.birth_place}</span>
-                <button
-                  className="button button-secondary inline-button"
-                  disabled={calculatingId === profile.id}
-                  onClick={() => void calculateNatalChart(profile.id)}
-                  type="button"
-                >
-                  {calculatingId === profile.id ? "Считаю..." : "Рассчитать натальную карту"}
-                </button>
+                <div className="inline-actions">
+                  <button
+                    className="button button-secondary inline-button"
+                    disabled={calculatingId === profile.id}
+                    onClick={() => void calculateNatalChart(profile.id)}
+                    type="button"
+                  >
+                    {calculatingId === profile.id ? "Считаю..." : "Рассчитать натальную карту"}
+                  </button>
+                  <button
+                    className="button button-danger inline-button"
+                    disabled={deletingProfileId === profile.id}
+                    onClick={() => void deleteProfile(profile.id)}
+                    type="button"
+                  >
+                    {deletingProfileId === profile.id ? "Удаляю..." : "Удалить профиль"}
+                  </button>
+                </div>
               </article>
             ))}
           </div>
@@ -217,7 +275,17 @@ export function BirthProfileForm() {
                   <strong>{chart.summary}</strong>
                   <span>Солнце: {chart.sun_sign}</span>
                   <span className="muted">{chart.interpretation}</span>
-                  <NatalChartDetailCard chartId={chart.id} />
+                  <div className="inline-actions">
+                    <NatalChartDetailCard chartId={chart.id} />
+                    <button
+                      className="button button-danger inline-button"
+                      disabled={deletingChartId === chart.id}
+                      onClick={() => void deleteChart(chart.id)}
+                      type="button"
+                    >
+                      {deletingChartId === chart.id ? "Удаляю..." : "Удалить карту"}
+                    </button>
+                  </div>
                 </article>
               ))}
             </div>
