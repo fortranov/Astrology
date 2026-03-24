@@ -6,7 +6,7 @@ export default function LoginPage() {
       <div className="card" style={{ maxWidth: 640, margin: "0 auto" }}>
         <div className="kicker">Auth</div>
         <h1>Вход в систему</h1>
-        <p className="muted">Войди по email и паролю, чтобы открыть административные настройки.</p>
+        <p className="muted">Войди по email и паролю, чтобы попасть на dashboard и открыть доступный функционал.</p>
         <LoginForm />
       </div>
     </main>

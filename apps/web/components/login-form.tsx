@@ -32,7 +32,7 @@ export function LoginForm() {
       localStorage.setItem("astrology_access_token", data.access_token);
       localStorage.setItem("astrology_user_email", data.email);
       localStorage.setItem("astrology_user_is_admin", String(data.is_admin));
-      router.push("/admin");
+      router.push("/dashboard");
       router.refresh();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Произошла ошибка");

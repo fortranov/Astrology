@@ -1,13 +1,18 @@
+import { AppShell } from "@/components/app-shell";
+
 export default function TarotPage() {
   return (
-    <main className="container" style={{ padding: "48px 0 72px" }}>
+    <AppShell
+      title="Таро"
+      description="Заготовка под отдельный функциональный раздел сервиса внутри авторизованной зоны."
+    >
       <div className="card">
         <div className="kicker">In progress</div>
-        <h1>Таро</h1>
+        <h2>Модуль Таро</h2>
         <p className="muted">
           Здесь будет модуль раскладов: выбор формата, вытягивание карт и интерпретация результата.
         </p>
       </div>
-    </main>
+    </AppShell>
   );
 }
